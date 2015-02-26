@@ -95,8 +95,8 @@ class EmailManager :
                              ])
             print tab
     
-    def add_emails(self,emailsdict):
-        for email in emailsdict:
+    def add_emails(self,emails):
+        for email in emails:
             self.__add_email(email['address'], email['password'], email['description'])
     
     def remove_emails(self,emails):

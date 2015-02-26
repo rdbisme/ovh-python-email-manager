@@ -4,10 +4,9 @@
 A small script that helps to add and remove one or more email addresses on the OVH shared domains
 
     Usage:
-        ovh_mails.py list 
-        ovh_mails.py add (<address> [(--pswd=<password> | -p <password)] | --file <filename>)[--description=<description> | -d <description>]
+        ovh_mails.py list [--ugly]
+        ovh_mails.py add (<address> [--pswd=<password>][--description=<description>] | --file <filename>)
         ovh_mails.py remove (<address> | --file <filename>)
-        ovh_mails.py flush
         ovh_mails.py (-h | --help)
     
     Arguments:
@@ -16,7 +15,8 @@ A small script that helps to add and remove one or more email addresses on the O
     
     Options: 
         -h, --help                        Show this help message
-        -p <password>, --pswd=<password>  Set the password to the one provided
+        -u, --ugly                        Print without nice tables
+        -p, --pswd=<password>  Set the password to the one provided
         
     Commands:
         list                              list all the email addresses currently configured
@@ -29,12 +29,42 @@ A small script that helps to add and remove one or more email addresses on the O
 
 import ovh
 from docopt import docopt
-import functions as fs
+from ovhem import em
 
 
 if __name__ == '__main__':
     args = docopt(__doc__)
     #Validate args ---- TODO
+    
+    print args
+    
+    if args['list']:
+        if args['--ugly']:
+            eman = em.EmailManager(niceoutput=False)
+        else:
+            eman = em.EmailManager()
+        eman.list_emails()
+    elif args['add']:
+        eman = em.EmailManager()
+        emails = (
+                  {
+                   'address': args['<address>'],
+                   'password': None,
+                   'description': None,
+                   },
+                  )
+        if args['--description']:
+            emails[0]['description'] = args['<description>']
+        if args['--pswd']:
+            emails[0]['password'] = args['<password>']
+        
+        eman.add_emails(emails)
+
+
+            
+    elif args['remove']:
+        raise NotImplemented
+              
   
     
 __author__ = "Ruben Di Battista"
