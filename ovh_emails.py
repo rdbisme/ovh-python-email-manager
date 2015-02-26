@@ -29,7 +29,7 @@ A small script that helps to add and remove one or more email addresses on the O
 
 import ovh
 from docopt import docopt
-from ovhem import em
+from ovhem import EmailManager
 
 
 if __name__ == '__main__':
@@ -40,12 +40,12 @@ if __name__ == '__main__':
     
     if args['list']:
         if args['--ugly']:
-            eman = em.EmailManager(niceoutput=False)
+            eman = EmailManager(niceoutput=False)
         else:
-            eman = em.EmailManager()
+            eman = EmailManager()
         eman.list_emails()
     elif args['add']:
-        eman = em.EmailManager()
+        eman = EmailManager()
         emails = (
                   {
                    'address': args['<address>'],
