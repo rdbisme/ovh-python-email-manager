@@ -5,7 +5,7 @@ A small script that helps to add and remove one or more email addresses on the O
 
     Usage:
         ovh_mails.py list 
-        ovh_mails.py add (<address> [(--pswd=<password> | -p <password)] | --file <filename>)
+        ovh_mails.py add (<address> [(--pswd=<password> | -p <password)] | --file <filename>)[--description=<description> | -d <description>]
         ovh_mails.py remove (<address> | --file <filename>)
         ovh_mails.py flush
         ovh_mails.py (-h | --help)

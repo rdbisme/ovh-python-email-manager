@@ -1,9 +1,11 @@
 import ovh
 import ConfigParser
+import string
+from random import choice
 from prettytable import PrettyTable
 
 class EmailManager :
-    ''' This class wraps the ovh Python API and provide some 
+    ''' This class uses the ovh Python API and provide some 
     functionalities to interact with email accounts
     
     Arguments: 
@@ -13,11 +15,9 @@ class EmailManager :
         client:                 ovh.Client() object 
         
     Methods:
-        check_token             Checks if the customer key is valid
-        get_token               Prompt to user a message to get the customer_key.
-                                It puts the key inside the ovh.conf
-        __get_emails            Retrieves the email accounts detail
         list_emails             List all the domain-associated email accounts
+        add_emails              Add the emails from the dictionary given as argument
+        remove_emails           Remove the emails from the dictionary given as argument
     
     '''
     
@@ -27,12 +27,15 @@ class EmailManager :
     DOMAIN = parser.get('smtp', 'domain')
     
     def __init__(self,niceoutput = True):
+        ''' Constructor. Checks for token validity and if not present or invalid prompt the user 
+        for getting it '''
+        
         self.niceoutput = niceoutput
-        if not(self.check_token()):
-            self.get_token()
+        if not(self.__check_token()):
+            self.__get_token()
 
     
-    def check_token(self):
+    def __check_token(self):
         try:
             self.client.get('/me/api/credential')
             return True
@@ -40,7 +43,7 @@ class EmailManager :
             print "API Error ({0})\n".format(e)
             return False
 
-    def get_token(self):
+    def __get_token(self):
         access_rules = [
                     {'method': 'GET', 'path': '/me/api/*'},
                     {'method': 'POST', 'path': '/me/api/*'},
@@ -83,12 +86,49 @@ class EmailManager :
             tab = PrettyTable(["Account Name","Description","Size","Blocked"])
             tab.align["City name"] = "c" 
             for account in accounts:
-                accountData = self.client.get('/email/domain/{0}/account/{1}'.format(self.DOMAIN,\
-                                                                                     account))
+
                 tab.add_row([
-                             accountData['accountName']+'@'+accountData['domain'],
-                             accountData['description'],
-                             accountData['size'],
-                             accountData['isBlocked']
+                             account['accountName']+'@'+account['domain'],
+                             account['description'],
+                             account['size'],
+                             account['isBlocked']
                              ])
             print tab
+    
+    def add_emails(self,emailsdict):
+        for email in emailsdict:
+            self.__add_email(email['address'], email['password'], email['description'])
+    
+    def remove_emails(self,emails):
+        for email in emails:
+            self.__remove_email(email['address'])
+            
+           
+    def __add_email(self,email,password=None,desc=None):
+        #Generating password if not provided
+        if not(password):
+            password = self.__mkpassword() 
+        #Checking if email already present
+        accounts = self.__get_emails()
+        if email in [account['accountName']+'@'+account['domain'] for account in accounts]:
+            raise RuntimeError('This email account is already present!')
+        else:
+            self.client.post('/email/domain/{0}/account'.format(self.DOMAIN),
+                             accountName=email.split('@')[0],
+                             description = desc,
+                             password = password,
+                             size = 5E9
+                             )
+    
+    def __remove_email(self,email):
+        #Checking if email is present
+        accounts = self.__get_emails()
+        if not(email in [account['accountName']+'@'+account['domain']  for account in accounts]):
+            print [account['accountName']+'@'+account['domain']  for account in accounts]
+            raise RuntimeError('This email cannot be deleted: not present!')
+        else:
+            self.client.delete('/email/domain/{0}/account/{1}'.format(self.DOMAIN,email.split('@')[0]))
+    
+    def __mkpassword(self,size=18):
+        chars = string.ascii_letters+string.digits
+        return ''.join(choice(chars) for _ in range(size))
