@@ -50,6 +50,8 @@ def send_notifications (emails):
         template = fp.read()
     for email in emails:
         stdout.write('. ')
+        # Here is where I'm inserting personal data inside the template
+        # Probably it's not the best thing to do about security
         template_ = template.format(username=email['address'],\
                                    password=email['password'])
         msg = MIMEText(template_)

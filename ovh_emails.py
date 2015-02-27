@@ -6,7 +6,6 @@ A small script that helps to add and remove one or more email addresses on the O
     Usage:
         ovh_mails.py list [--ugly]
         ovh_mails.py add (<address> [--pswd=<password>][--description=<description>] | --file <filename> [--notify])
-        ovh_mails.py update (<address> [--pswd=<password>][--description=<description>] | --file <filename> [--notify])
         ovh_mails.py remove (<address> | --file <filename>)
         ovh_mails.py (-h | --help)
     
@@ -80,29 +79,6 @@ if __name__ == '__main__':
         if args['--file']:
             emails = fp.process_file(args['<filename>'])
         eman.remove_emails(emails)
-        
-    elif args['update']:
-        if args['<address>']:
-
-            emails = (
-                      {
-                       'address': args['<address>'],
-                       'password': None,
-                       'description': None,
-                       },
-                      )
-            if args['--description']:
-                emails[0]['description'] = args['<description>']
-            if args['--pswd']:
-                emails[0]['password'] = args['<password>']
-        if args['--file']:
-            emails = fp.process_file(args['<filename>'])    
-            
-        # Getting back the emails dict
-        emails=eman.update_emails(emails)
-        if args['--notify']:
-            fp.send_notifications(emails)
-              
   
     
 __author__ = "Ruben Di Battista"

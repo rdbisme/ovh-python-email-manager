@@ -1,0 +1,16 @@
+[default]
+endpoint = ovh-eu
+
+[ovh-eu]
+application_key = 
+application_secret = 
+consumer_key = 
+domain = example.com
+
+[smtp]
+username = user@domain.com
+password = 
+from = user@domain.com
+port = 587
+host = smtp.domain.com
+
