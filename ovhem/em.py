@@ -24,7 +24,7 @@ class EmailManager :
     client = ovh.Client()
     parser = ConfigParser.SafeConfigParser()
     parser.read('ovh.conf')
-    DOMAIN = parser.get('smtp', 'domain')
+    DOMAIN = parser.get('ovh-eu', 'domain')
     
     def __init__(self,niceoutput = True):
         ''' Constructor. Checks for token validity and if not present or invalid prompt the user 

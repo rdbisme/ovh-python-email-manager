@@ -20,9 +20,8 @@ A small script that helps to add and remove one or more email addresses on the O
         
     Commands:
         list                              list all the email addresses currently configured
-        add                               add one ore more (configured in <filename>) email addresses
+        add                               add one or more (configured in <filename>) email addresses
         remove                            remove one ore more (configured in <filename>) email addresses
-        flush                             flush all the credentials released
     '''
     
 
@@ -36,34 +35,47 @@ if __name__ == '__main__':
     args = docopt(__doc__)
     #Validate args ---- TODO
     
-    print args
-    
+    # 'List' command parsing
     if args['list']:
         if args['--ugly']:
             eman = EmailManager(niceoutput=False)
         else:
             eman = EmailManager()
         eman.list_emails()
+    # 'Add' command parsing
     elif args['add']:
-        eman = EmailManager()
-        emails = (
-                  {
-                   'address': args['<address>'],
-                   'password': None,
-                   'description': None,
-                   },
-                  )
-        if args['--description']:
-            emails[0]['description'] = args['<description>']
-        if args['--pswd']:
-            emails[0]['password'] = args['<password>']
+        if args['<address>']:
+            eman = EmailManager()
+            emails = (
+                      {
+                       'address': args['<address>'],
+                       'password': None,
+                       'description': None,
+                       },
+                      )
+            if args['--description']:
+                emails[0]['description'] = args['<description>']
+            if args['--pswd']:
+                emails[0]['password'] = args['<password>']
+        if args['--file']:
+            
+            
         
         eman.add_emails(emails)
 
 
-            
+    # 'remove' command parsing       
     elif args['remove']:
-        raise NotImplemented
+        if args['<address>']:
+            eman = EmailManager()
+            emails = (
+                      {
+                       'address': args['<address>'],
+                       },
+                      )
+        eman.remove_emails(emails)
+        if args['--file']:
+            raise NotImplemented
               
   
     
