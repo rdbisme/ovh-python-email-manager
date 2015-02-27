@@ -18,9 +18,7 @@ class EmailManager :
     Methods:
         list_emails             List all the domain-associated email accounts
         add_emails              Add the emails from the dictionary given as argument
-        remove_emails           Remove the emails from the dictionary given as argument
-        update_emails           Update the emails from the dictionary as argument
-    
+        remove_emails           Remove the emails from the dictionary given as argument    
     '''
     
     client = ovh.Client()
@@ -113,28 +111,7 @@ class EmailManager :
     def remove_emails(self,emails):
         print 'Removing emails...'
         for email in emails:
-            self.__remove_email(email['address'])
-            
-    def update_emails(self,emails):
-        print 'Updating emails...'
-        for email in emails:
-            self.__update_email(email['address'], email['password'], email['description'])
-            
-    def __update_email(self,email,password,desc=None):
-        #Checking if email already present
-        accounts = self.__get_emails()
-        if not(email in [account['accountName']+'@'+account['domain'] for account in accounts]):
-            warnings.warn('{email} cannot be updated: not present!'.format(email=email),\
-                          RuntimeWarning)
-        else:
-            self.client.put('/email/domain/{0}/account'.format(self.DOMAIN),
-                             accountName=email.split('@')[0],
-                             description = desc,
-                             password = password,
-                             size = 5E9
-                             )
-        print email+' updated!'
-            
+            self.__remove_email(email['address'])            
            
     def __add_email(self,email,password,desc=None):
         #Checking if email already present

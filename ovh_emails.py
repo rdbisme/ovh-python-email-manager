@@ -99,7 +99,7 @@ if __name__ == '__main__':
             emails = fp.process_file(args['<filename>'])    
             
         # Getting back the emails dict
-        emails=eman.add_emails(emails)
+        emails=eman.update_emails(emails)
         if args['--notify']:
             fp.send_notifications(emails)
               
