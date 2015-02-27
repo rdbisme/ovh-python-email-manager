@@ -2,6 +2,7 @@ import csv
 import smtplib
 from email.mime.text import MIMEText
 import ConfigParser
+from sys import stdout
 
 def process_file(file):
     ''' This function processes the <file> and return a dictionary
@@ -41,21 +42,23 @@ def send_notifications (emails):
     parser.read('ovh.conf')
     
     #SMTP connection
+    print "Connecting via SMTP..."
     conn = smtplib.SMTP(parser.get('smtp','host'),parser.get('smtp','port'))
     conn.login(parser.get('smtp','username'), parser.get('smtp','password'))
     
     with open('mail.template','rU') as fp:
         template = fp.read()
     for email in emails:
+        stdout.write('. ')
         template = template.format(username=email['address'],\
                                    password=email['password'])
         msg = MIMEText(template)
         msg['Subject'] = 'New personal mailbox!'
         msg['From'] = parser.get('smtp','from')
-        msg['To'] = 'tidusuper91@gmail.com' #email['notification']
+        msg['To'] = email['notification']
         
         conn.sendmail(msg['From'], msg['To'], msg.as_string())
-        conn.quit()
+    conn.quit()
         
 
         

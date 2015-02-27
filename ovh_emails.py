@@ -70,8 +70,9 @@ if __name__ == '__main__':
 
     # 'remove' command parsing       
     elif args['remove']:
+        eman = EmailManager()
         if args['<address>']:
-            eman = EmailManager()
+
             emails = (
                       {
                        'address': args['<address>'],

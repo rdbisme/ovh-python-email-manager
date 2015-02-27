@@ -1,6 +1,7 @@
 import ovh
 import ConfigParser
 import string
+import warnings
 from random import choice
 from prettytable import PrettyTable
 
@@ -36,6 +37,7 @@ class EmailManager :
 
     
     def __check_token(self):
+        print 'Checking Token...'
         try:
             self.client.get('/me/api/credential')
             return True
@@ -96,6 +98,7 @@ class EmailManager :
             print tab
     
     def add_emails(self,emails):
+        print 'Adding emails...'
         for i,email in enumerate(emails):
             # If password is not set
             if not(email['password']):
@@ -107,6 +110,7 @@ class EmailManager :
         return emails
     
     def remove_emails(self,emails):
+        print 'Removing emails...'
         for email in emails:
             self.__remove_email(email['address'])
             
@@ -115,7 +119,7 @@ class EmailManager :
         #Checking if email already present
         accounts = self.__get_emails()
         if email in [account['accountName']+'@'+account['domain'] for account in accounts]:
-            raise RuntimeError('This email account is already present!')
+            warnings.warn('{email} is already there!'.format(email=email),RuntimeWarning)
         else:
             self.client.post('/email/domain/{0}/account'.format(self.DOMAIN),
                              accountName=email.split('@')[0],
@@ -123,15 +127,19 @@ class EmailManager :
                              password = password,
                              size = 5E9
                              )
+        print email+' added!'
     
     def __remove_email(self,email):
         #Checking if email is present
         accounts = self.__get_emails()
         if not(email in [account['accountName']+'@'+account['domain']  for account in accounts]):
             print [account['accountName']+'@'+account['domain']  for account in accounts]
-            raise RuntimeError('This email cannot be deleted: not present!')
+            warnings.warn('{email} cannot be deleted: not present!'.format(email=email),\
+                          RuntimeWarning)
         else:
             self.client.delete('/email/domain/{0}/account/{1}'.format(self.DOMAIN,email.split('@')[0]))
+        
+        print email+' removed!'
     
     def __mkpassword(self,size=18):
         chars = string.ascii_letters+string.digits
