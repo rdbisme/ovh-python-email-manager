@@ -46,10 +46,6 @@ class EmailManager :
 
     def __get_token(self):
         access_rules = [
-                    {'method': 'GET', 'path': '/me/api/*'},
-                    {'method': 'POST', 'path': '/me/api/*'},
-                    {'method': 'PUT', 'path': '/me/api/*'},
-                    {'method': 'DELETE', 'path': '/me/api/*'},
                     {'method': 'GET', 'path': '/email/domain*'},
                     {'method': 'POST', 'path': '/email/domain*'},
                     {'method': 'PUT', 'path': '/email/domain*'},
