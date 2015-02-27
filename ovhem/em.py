@@ -96,18 +96,22 @@ class EmailManager :
             print tab
     
     def add_emails(self,emails):
-        for email in emails:
+        for i,email in enumerate(emails):
+            # If password is not set
+            if not(email['password']):
+                password = self.__mkpassword()
+                emails[i]['password'] = password
+                email['password'] = password
+                
             self.__add_email(email['address'], email['password'], email['description'])
+        return emails
     
     def remove_emails(self,emails):
         for email in emails:
             self.__remove_email(email['address'])
             
            
-    def __add_email(self,email,password=None,desc=None):
-        #Generating password if not provided
-        if not(password):
-            password = self.__mkpassword() 
+    def __add_email(self,email,password,desc=None):
         #Checking if email already present
         accounts = self.__get_emails()
         if email in [account['accountName']+'@'+account['domain'] for account in accounts]:

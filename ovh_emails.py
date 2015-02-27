@@ -5,18 +5,19 @@ A small script that helps to add and remove one or more email addresses on the O
 
     Usage:
         ovh_mails.py list [--ugly]
-        ovh_mails.py add (<address> [--pswd=<password>][--description=<description>] | --file <filename>)
+        ovh_mails.py add (<address> [--pswd=<password>][--description=<description>] | --file <filename> [--notify])
         ovh_mails.py remove (<address> | --file <filename>)
         ovh_mails.py (-h | --help)
     
     Arguments:
         <password>                        Password to access the mailbox (if not provided it's random generated)
-        <filename>                        Name of the files to process. Check README to see how to format it
+        <filename>                        Name of the files to process (csv). Check README to see how to format it
     
     Options: 
         -h, --help                        Show this help message
         -u, --ugly                        Print without nice tables
-        -p, --pswd=<password>  Set the password to the one provided
+        -p, --pswd=<password>             Set the password to the one provided
+        -n, --notify                      If set, notification mail is sent using smtp credentials in ovh.conf
         
     Commands:
         list                              list all the email addresses currently configured
@@ -29,6 +30,7 @@ A small script that helps to add and remove one or more email addresses on the O
 import ovh
 from docopt import docopt
 from ovhem import EmailManager
+from ovhem import fileprocesser as fp
 
 
 if __name__ == '__main__':
@@ -44,8 +46,9 @@ if __name__ == '__main__':
         eman.list_emails()
     # 'Add' command parsing
     elif args['add']:
+        eman = EmailManager()
         if args['<address>']:
-            eman = EmailManager()
+
             emails = (
                       {
                        'address': args['<address>'],
@@ -58,11 +61,12 @@ if __name__ == '__main__':
             if args['--pswd']:
                 emails[0]['password'] = args['<password>']
         if args['--file']:
+            emails = fp.process_file(args['<filename>'])    
             
-            
-        
-        eman.add_emails(emails)
-
+        # Getting back the emails dict
+        emails=eman.add_emails(emails)
+        if args['--notify']:
+            fp.send_notifications(emails)
 
     # 'remove' command parsing       
     elif args['remove']:
@@ -73,9 +77,9 @@ if __name__ == '__main__':
                        'address': args['<address>'],
                        },
                       )
-        eman.remove_emails(emails)
         if args['--file']:
-            raise NotImplemented
+            emails = fp.process_file(args['<filename>'])
+        eman.remove_emails(emails)
               
   
     
