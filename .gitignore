@@ -1,3 +1,4 @@
 ovh.conf
 *.csv
 *.template
+*.pyc

@@ -131,7 +131,6 @@ class EmailManager :
         #Checking if email is present
         accounts = self.__get_emails()
         if not(email in [account['accountName']+'@'+account['domain']  for account in accounts]):
-            print [account['accountName']+'@'+account['domain']  for account in accounts]
             warnings.warn('{email} cannot be deleted: not present!'.format(email=email),\
                           RuntimeWarning)
         else:
