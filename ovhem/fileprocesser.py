@@ -50,9 +50,9 @@ def send_notifications (emails):
         template = fp.read()
     for email in emails:
         stdout.write('. ')
-        template = template.format(username=email['address'],\
+        template_ = template.format(username=email['address'],\
                                    password=email['password'])
-        msg = MIMEText(template)
+        msg = MIMEText(template_)
         msg['Subject'] = 'New personal mailbox!'
         msg['From'] = parser.get('smtp','from')
         msg['To'] = email['notification']
