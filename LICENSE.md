@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-Copyright (c) 2015, Ruben Di Battista
-=======
 Copyright (c) 2015, Ruben Di Battista <rubendibattista@gmail.com>
->>>>>>> 6dd847419f1ce26c9c1d46177facefb56dade666
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
