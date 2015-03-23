@@ -5,13 +5,15 @@ A small script that helps to add and remove one or more email addresses on the O
 
     Usage:
         ovh_mails.py list [--ugly]
-        ovh_mails.py add (<address> [--pswd=<password>][--description=<description>] | --file <filename> [--notify])
+        ovh_mails.py add (<address> [--pswd=<password>][--description=<description>] [--notify <notifyEmail>] | --file <filename> [--notify]) 
         ovh_mails.py remove (<address> | --file <filename>)
         ovh_mails.py (-h | --help)
     
     Arguments:
         <password>                        Password to access the mailbox (if not provided it's random generated)
         <filename>                        Name of the files to process (csv). Check README to see how to format it
+        <description>                     Description of the mailbox
+        <notifyEmail>                     Email address that receives a notification email using smtp credentials in ovh.conf
     
     Options: 
         -h, --help                        Show this help message
@@ -36,6 +38,13 @@ from ovhem import fileprocesser as fp
 if __name__ == '__main__':
     args = docopt(__doc__)
     #Validate args ---- TODO
+    
+    # Defaults
+    password = None
+    description = None
+    address_arg = args['<address>']
+    
+    # Email Manager Class
     eman = EmailManager()
     
     # 'List' command parsing
@@ -46,20 +55,25 @@ if __name__ == '__main__':
         eman.list_emails()
     # 'Add' command parsing
     elif args['add']:
-        if args['<address>']:
-
+        # If address is provided --> single insert
+        if address_arg:
+            address= address_arg       
+            if args['--description']:
+                description = args['description']
+            if args['--pswd']:
+                password = args['description']
+            if args['<notifyEmail>']:
+                notifyEmail = args['<notifyEmail>']
             emails = (
                       {
-                       'address': args['<address>'],
-                       'password': None,
-                       'description': None,
+                       'address': address,
+                       'password': password,
+                       'description': description,
+                       'notification': notifyEmail,
                        },
                       )
-            if args['--description']:
-                emails[0]['description'] = args['<description>']
-            if args['--pswd']:
-                emails[0]['password'] = args['<password>']
-        if args['--file']:
+        # Else process a csv file
+        elif args['--file']:
             emails = fp.process_file(args['<filename>'])    
             
         # Getting back the emails dict
@@ -69,18 +83,20 @@ if __name__ == '__main__':
 
     # 'remove' command parsing       
     elif args['remove']:
-        if args['<address>']:
+        # If address is provided --> single insert
+        if address_arg:
+            address = address_arg
 
             emails = (
                       {
-                       'address': args['<address>'],
+                       'address': address,
                        },
                       )
-        if args['--file']:
+        # Else process a csv file
+        elif args['--file']:
             emails = fp.process_file(args['<filename>'])
         eman.remove_emails(emails)
-  
-    
+
 __author__ = "Ruben Di Battista"
 __license__ = "BSD 2-clause"
 __version__ = "0.1a"
