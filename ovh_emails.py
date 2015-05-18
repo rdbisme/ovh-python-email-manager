@@ -97,9 +97,3 @@ if __name__ == '__main__':
             emails = fp.process_file(args['<filename>'])
         eman.remove_emails(emails)
 
-__author__ = "Ruben Di Battista"
-__license__ = "BSD 2-clause"
-__version__ = "0.1a"
-__email__ = "tidusuper91@gmail.com"
-__status__ = "Prototype"
-    
