@@ -27,7 +27,11 @@ A small script that helps to add and remove one or more email addresses on the O
         remove                            remove one ore more (configured in <filename>) email addresses
     '''
     
-
+__version__ = '0.1a'
+__author__ = ('Ruben Di Battista',
+              '@rubendibattista',
+              'rubendibattista@gmail.com'
+              )
 
 import ovh
 from docopt import docopt
