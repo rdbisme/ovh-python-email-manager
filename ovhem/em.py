@@ -122,7 +122,7 @@ class EmailManager :
                              password = password,
                              size = 5E9
                              )
-        print email+' added!'
+            print email+' added!'
     
     def __remove_email(self,email):
         #Checking if email is present
@@ -132,8 +132,7 @@ class EmailManager :
                           RuntimeWarning)
         else:
             self.client.delete('/email/domain/{0}/account/{1}'.format(self.DOMAIN,email.split('@')[0]))
-        
-        print email+' removed!'
+            print email+' removed!'
     
     def __mkpassword(self,size=18):
         chars = string.ascii_letters+string.digits
