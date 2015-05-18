@@ -18,7 +18,7 @@ class EmailManager :
     Methods:
         list_emails             List all the domain-associated email accounts
         add_emails              Add the emails from the dictionary given as argument
-        remove_emails           Remove the emails from the dictionary given as argument    
+        remove_emails           Remove the emails listed in  the dictionary given as argument    
     '''
     
     client = ovh.Client()
