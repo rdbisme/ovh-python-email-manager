@@ -46,4 +46,4 @@ Even here you can use the same csv formatting if setting `--filename` flag. In t
 
 When you set the flag `-n` the script sends via the SMTP settings you configured in `ovh.conf` a mail using the `mail.template`.
 
-An example is reported in the `mail.template.example`. Basically you have to provide a text, where the placheholder `{username}` and `{password}` are replaced with the true values
+An example is reported in the `mail.template.example`. Basically you have to provide a text, where the placheholders `{username}` and `{password}` are replaced with the true values
