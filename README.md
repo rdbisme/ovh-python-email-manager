@@ -41,3 +41,9 @@ the only field needed is `Account Name`. If `Password` is not filled up the prog
 ```ovh_mails.py remove (<address> | --file <filename>)```
 
 Even here you can use the same csv formatting if setting `--filename` flag. In this case the only field used is `Account Name`
+
+### Notifications
+
+When you set the flag `-n` the script sends via the SMTP settings you configured in `ovh.conf` a mail using the `mail.template`.
+
+An example is reported in the `mail.template.example`. Basically you have to provide a text, where the placheholder `{username}` and `{password}` are replaced with the true values
