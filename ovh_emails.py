@@ -5,7 +5,7 @@ A small script that helps to add and remove one or more email addresses on the O
 
     Usage:
         ovh_mails.py list [--ugly]
-        ovh_mails.py add (<address> [--pswd=<password>][--description=<description>] [--notify <notifyEmail>] | --file <filename> [--notify]) 
+        ovh_mails.py add (<address> [--pswd <password>][--description <description>] [--notify <notifyEmail>] | --file <filename> [--notify]) 
         ovh_mails.py remove (<address> | --file <filename>)
         ovh_mails.py (-h | --help)
     
@@ -18,8 +18,9 @@ A small script that helps to add and remove one or more email addresses on the O
     Options: 
         -h, --help                        Show this help message
         -u, --ugly                        Print without nice tables
-        -p, --pswd=<password>             Set the password to the one provided
+        -p, --pswd                        Set the password to the one provided
         -n, --notify                      If set, notification mail is sent using smtp credentials in ovh.conf
+        -d, --description                 Set the description for the mailbox
         
     Commands:
         list                              list all the email addresses currently configured
@@ -63,9 +64,9 @@ if __name__ == '__main__':
         if address_arg:
             address= address_arg       
             if args['--description']:
-                description = args['description']
+                description = args['<description>']
             if args['--pswd']:
-                password = args['description']
+                password = args['<password>']
             if args['<notifyEmail>']:
                 notifyEmail = args['<notifyEmail>']
             emails = (
