@@ -35,7 +35,7 @@ The nice thing is that you can process a file that is formatted as 4 field csv :
 e.g.
 ['rdb@domain.com', 'A sample mailbox','','rdb@gmail.com']
 ```
-the only field needed is `Account Name`. If `Password` is not filled up the program auto-calculate it. `Notification Email` is only needed if the `--notify` flag is used.
+the only field needed is `Account Name`. If `Password` is not filled up the program auto-calculates it. `Notification Email` is only needed if the `--notify` flag is used.
 
 - Removing Entries
 ```ovh_mails.py remove (<address> | --file <filename>)```
